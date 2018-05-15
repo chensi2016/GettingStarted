@@ -2,22 +2,26 @@ package com.intellijava;
 import java.util.ArrayList;
 
 public class MyMap {
-    ArrayList<MyHashNode> myHashNode = new ArrayList<MyHashNode>();
+    ArrayList<MyHashNode> myHashNodeList = new ArrayList<MyHashNode>();
 
     MyHashNode lastHashNode;
     int hashLength = 10;
     int size = 0;
+    public MyMap(){
+        for(int i=0;i<hashLength;i++)
+            myHashNodeList.add(new MyHashNode());
+    }
     public int getIndex(String key){
         int index;
         index = key.hashCode()%hashLength;
         return index;
     }
-    public int getValue(String key) {
+    public Integer getValue(String key) {
         int index;
         MyHashNode firstHashNode;
-        int value=9999;
+        Integer value=null;
         index = getIndex(key);
-        firstHashNode = myHashNode.get(index);
+        firstHashNode = myHashNodeList.get(index);
         if(firstHashNode.next == null)
             return value;
         while(firstHashNode.next != null){
@@ -32,8 +36,8 @@ public class MyMap {
     public MyHashNode getLastHashNode(int index) {
 
         MyHashNode aHashNode;
-        if(myHashNode.get(index)!=null) {
-            aHashNode = myHashNode.get(index);
+        if(myHashNodeList.get(index).key!=null) {
+            aHashNode = myHashNodeList.get(index);
             while (aHashNode.next != null)
                 aHashNode = aHashNode.next;
 
@@ -52,10 +56,10 @@ public class MyMap {
         int index = getIndex(key);
         MyHashNode aHashNode = new MyHashNode(key, value);
         lastHashNode=getLastHashNode(index);
-        if(myHashNode.get(index)==null)
+        if(lastHashNode==null)
              {
                  size++;
-                 myHashNode.add(index, aHashNode);
+                 myHashNodeList.add(index, aHashNode);
              }
         else
             {
@@ -65,11 +69,24 @@ public class MyMap {
 
     }
 
-    public int remove(String key){
+    public Integer remove(String key){
         int index=getIndex(key);
-        myHashNode.remove(index);
-        size--;
-        return getIndex(key);
+        MyHashNode aHashNode;
+        if(myHashNodeList.get(index).key!=null) {
+            if(myHashNodeList.get(index).next!=null) {
+                aHashNode = myHashNodeList.get(index).next;
+                myHashNodeList.remove(index);
+                myHashNodeList.add(index,aHashNode);
+                return myHashNodeList.get(index).value;
+            }
+            else {
+                myHashNodeList.remove(index);
+                size--;
+                return null;
+            }
+        }
+        else
+        return null;
     }
 
     public boolean isEmpty(){

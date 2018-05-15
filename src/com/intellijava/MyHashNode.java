@@ -7,5 +7,9 @@ public class MyHashNode{
     public MyHashNode(String key, int value){
         this.key = key;
         this.value = value;
+        this.next = null;
         }
+
+    public MyHashNode(){
+    }
 }
