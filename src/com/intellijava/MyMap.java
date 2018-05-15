@@ -59,7 +59,7 @@ public class MyMap {
         if(lastHashNode==null)
              {
                  size++;
-                 myHashNodeList.add(index, aHashNode);
+                 myHashNodeList.set(index, aHashNode);
              }
         else
             {
