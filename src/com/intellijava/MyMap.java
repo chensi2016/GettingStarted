@@ -76,7 +76,7 @@ public class MyMap {
             if(myHashNodeList.get(index).next!=null) {
                 aHashNode = myHashNodeList.get(index).next;
                 myHashNodeList.remove(index);
-                myHashNodeList.add(index,aHashNode);
+                myHashNodeList.set(index,aHashNode);
                 return myHashNodeList.get(index).value;
             }
             else {

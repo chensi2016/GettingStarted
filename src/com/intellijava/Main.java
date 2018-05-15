@@ -10,7 +10,9 @@ public class Main {
         map.add("this",5 );
         map.add("that",6 );
         map.add("coder",3 );
+        map.add("tokyo",3 );
         System.out.println(map.getSize());
+        System.out.println(map.remove("this"));
         System.out.println(map.remove("this"));
         System.out.println(map.remove("this"));
         System.out.println(map.getSize());
