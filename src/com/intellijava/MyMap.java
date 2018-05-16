@@ -13,7 +13,7 @@ public class MyMap {
     }
     public int getIndex(String key){
         int index;
-        index = key.hashCode()%hashLength;
+        index =Math.abs(key.hashCode())%hashLength;
         return index;
     }
     public Integer getValue(String key) {
@@ -22,14 +22,20 @@ public class MyMap {
         Integer value=null;
         index = getIndex(key);
         firstHashNode = myHashNodeList.get(index);
-        if(firstHashNode.next == null)
+        if(firstHashNode.next == null) {
+            if(firstHashNode.key==key) {
+                value = firstHashNode.value;
+                return value;
+            }
             return value;
+        }
         while(firstHashNode.next != null){
             if(firstHashNode.key==key)
                 value = firstHashNode.value;
             else
                 firstHashNode=firstHashNode.next;
         }
+        value = firstHashNode.value;
         return value;
     }
 
@@ -69,25 +75,65 @@ public class MyMap {
 
     }
 
-    public Integer remove(String key){
-        int index=getIndex(key);
+    public Integer remove(String key) {
+        int index = getIndex(key);
         MyHashNode aHashNode;
-        if(myHashNodeList.get(index).key!=null) {
-            if(myHashNodeList.get(index).next!=null) {
-                aHashNode = myHashNodeList.get(index).next;
-                myHashNodeList.remove(index);
-                myHashNodeList.set(index,aHashNode);
-                return myHashNodeList.get(index).value;
-            }
-            else {
-                myHashNodeList.remove(index);
+        aHashNode = myHashNodeList.get(index);
+        if (aHashNode.key != null && aHashNode.next == null) {
+            //1 notes
+            if (aHashNode.key == key) {
+                myHashNodeList.set(index, null);
                 size--;
                 return null;
-            }
+            } else
+                return null;
         }
-        else
+        else {
+            if (aHashNode.next.key != null && aHashNode.next.next == null) { //2 notes
+                if (aHashNode.key == key) {
+                    myHashNodeList.set(index, aHashNode.next);
+                    return aHashNode.next.value;
+                } else {
+                    if (aHashNode.next.key == key) {
+                        aHashNode.next = null;
+                        return null;
+                    } else
+                        return null;
+
+                }
+            }
+            else{
+                //3 notes or more
+                if(aHashNode.key==key) {
+                    //the head is the one to find
+                    myHashNodeList.set(index, aHashNode.next);
+                    return aHashNode.next.value;
+                }
+
+                else{
+                    while(aHashNode.next.next!=null)
+                    {
+                        if(aHashNode.next.key==key) {
+                            aHashNode.next = aHashNode.next.next;
+                            return aHashNode.next.value;
+                        }
+                        else
+                            aHashNode=aHashNode.next;
+
+                    }
+                    if(aHashNode.next.key==key)
+                        aHashNode.next=null;
+
+
+                }
+
+            } //3 notes or more finished
+        }
+
         return null;
     }
+
+
 
     public boolean isEmpty(){
         if(size==0)
