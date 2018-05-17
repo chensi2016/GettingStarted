@@ -15,6 +15,11 @@ public class Main {
         map.add("koto",9 );
         map.add("tsukishima",10 );
         map.add("kachidoki",11 );
+        map.add("monzennakacho",12 );
+        map.add("kiyosumishirakawa",13 );
+        map.add("sumiyoshi",14 );
+        map.add("morishita",15);
+        map.add("kikukawa",16 );
         System.out.println(map.getSize());
         System.out.println(map.remove("this"));
         System.out.println(map.remove("this"));
@@ -22,7 +27,15 @@ public class Main {
         map.add("this",12);
         System.out.println(map.getValue("this"));
         System.out.println(map.getValue("tokyo"));
+        System.out.println(map.remove("big"));
+        System.out.println(map.remove("tokyo"));
+        System.out.println(map.remove("morishita"));
+
         System.out.println(map.getSize());
+        map.add("morishita",15);
+        System.out.println(map.getSize());
+        System.out.println(map.getValue("tokyo"));
+        //System.out.println(map.getValue("tokyo"));
         System.out.println(map.isEmpty());
     }
 }

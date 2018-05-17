@@ -30,8 +30,10 @@ public class MyMap {
             return value;
         }
         while(firstHashNode.next != null){
-            if(firstHashNode.key==key)
+            if(firstHashNode.key==key) {
                 value = firstHashNode.value;
+                return value;
+            }
             else
                 firstHashNode=firstHashNode.next;
         }
@@ -82,7 +84,8 @@ public class MyMap {
         if (aHashNode.key != null && aHashNode.next == null) {
             //1 notes
             if (aHashNode.key == key) {
-                myHashNodeList.set(index, null);
+                MyHashNode nullHashNode=new MyHashNode();
+                myHashNodeList.set(index, nullHashNode);
                 size--;
                 return null;
             } else
