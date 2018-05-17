@@ -1,36 +1,35 @@
 package com.intellijava;
 import java.util.ArrayList;
 
-public class MyMap {
-    ArrayList<MyHashNode> myHashNodeList = new ArrayList<MyHashNode>();
+class MyMap {
+    private ArrayList<MyHashNode> myHashNodeList = new ArrayList<>();
 
-    MyHashNode lastHashNode;
-    int hashLength = 10;
-    int size = 0;
-    public MyMap(){
+    private MyHashNode lastHashNode;
+    private int hashLength = 10;
+    private int size = 0;
+    MyMap(){
         for(int i=0;i<hashLength;i++)
             myHashNodeList.add(new MyHashNode());
     }
-    public int getIndex(String key){
+    private int getIndex(String key){
         int index;
         index =Math.abs(key.hashCode())%hashLength;
         return index;
     }
-    public Integer getValue(String key) {
+    Integer getValue(String key) {
         int index;
         MyHashNode firstHashNode;
-        Integer value=null;
+        Integer value;
         index = getIndex(key);
         firstHashNode = myHashNodeList.get(index);
         if(firstHashNode.next == null) {
-            if(firstHashNode.key==key) {
+            if(firstHashNode.key.equals(key)) {
                 value = firstHashNode.value;
                 return value;
             }
-            return value;
         }
         while(firstHashNode.next != null){
-            if(firstHashNode.key==key) {
+            if(firstHashNode.key.equals(key)) {
                 value = firstHashNode.value;
                 return value;
             }
@@ -41,7 +40,7 @@ public class MyMap {
         return value;
     }
 
-    public MyHashNode getLastHashNode(int index) {
+    private MyHashNode getLastHashNode(int index) {
 
         MyHashNode aHashNode;
         if(myHashNodeList.get(index).key!=null) {
@@ -56,11 +55,11 @@ public class MyMap {
         return lastHashNode;
     }
 
-    public int getSize(){
+    int getSize(){
         return size;
     }
 
-    public void add(String key, int value){
+    void add(String key, int value){
         int index = getIndex(key);
         MyHashNode aHashNode = new MyHashNode(key, value);
         lastHashNode=getLastHashNode(index);
@@ -77,13 +76,13 @@ public class MyMap {
 
     }
 
-    public Integer remove(String key) {
+    Integer remove(String key) {
         int index = getIndex(key);
         MyHashNode aHashNode;
         aHashNode = myHashNodeList.get(index);
         if (aHashNode.key != null && aHashNode.next == null) {
             //1 notes
-            if (aHashNode.key == key) {
+            if (aHashNode.key.equals(key)) {
                 MyHashNode nullHashNode=new MyHashNode();
                 myHashNodeList.set(index, nullHashNode);
                 size--;
@@ -93,11 +92,11 @@ public class MyMap {
         }
         else {
             if (aHashNode.next.key != null && aHashNode.next.next == null) { //2 notes
-                if (aHashNode.key == key) {
+                if (aHashNode.key.equals(key)) {
                     myHashNodeList.set(index, aHashNode.next);
                     return aHashNode.next.value;
                 } else {
-                    if (aHashNode.next.key == key) {
+                    if (aHashNode.next.key.equals(key)) {
                         aHashNode.next = null;
                         return null;
                     } else
@@ -107,7 +106,7 @@ public class MyMap {
             }
             else{
                 //3 notes or more
-                if(aHashNode.key==key) {
+                if(aHashNode.key.equals(key)) {
                     //the head is the one to find
                     myHashNodeList.set(index, aHashNode.next);
                     return aHashNode.next.value;
@@ -116,7 +115,7 @@ public class MyMap {
                 else{
                     while(aHashNode.next.next!=null)
                     {
-                        if(aHashNode.next.key==key) {
+                        if(aHashNode.next.key.equals(key)) {
                             aHashNode.next = aHashNode.next.next;
                             return aHashNode.next.value;
                         }
@@ -124,7 +123,7 @@ public class MyMap {
                             aHashNode=aHashNode.next;
 
                     }
-                    if(aHashNode.next.key==key)
+                    if(aHashNode.next.key.equals(key))
                         aHashNode.next=null;
 
 
@@ -138,7 +137,7 @@ public class MyMap {
 
 
 
-    public boolean isEmpty(){
+    boolean isEmpty(){
         if(size==0)
             return true;
         else
