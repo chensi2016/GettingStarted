@@ -37,5 +37,6 @@ public class Main {
         System.out.println(map.getValue("tokyo"));
         //System.out.println(map.getValue("tokyo"));
         System.out.println(map.isEmpty());
+        System.out.println(map.getValue("kiyosumishirakawa"));
     }
 }

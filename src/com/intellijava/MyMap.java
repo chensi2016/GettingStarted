@@ -27,6 +27,8 @@ class MyMap {
                 value = firstHashNode.value;
                 return value;
             }
+            else
+                return null;
         }
         while(firstHashNode.next != null){
             if(firstHashNode.key.equals(key)) {
@@ -36,8 +38,7 @@ class MyMap {
             else
                 firstHashNode=firstHashNode.next;
         }
-        value = firstHashNode.value;
-        return value;
+        return null;
     }
 
     private MyHashNode getLastHashNode(int index) {
