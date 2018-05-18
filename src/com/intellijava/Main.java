@@ -38,5 +38,16 @@ public class Main {
         //System.out.println(map.getValue("tokyo"));
         System.out.println(map.isEmpty());
         System.out.println(map.getValue("kiyosumishirakawa"));
+
+         LRUCache obj = new LRUCache(2);
+        obj.put(1,1);
+        obj.put(2,2);
+        System.out.println(obj.get(1));
+        obj.put(3,2);
+        System.out.println(obj.get(2));
+        obj.put(4,4);
+        System.out.println(obj.get(1));
+        System.out.println(obj.get(3));
+        System.out.println(obj.get(4));
     }
 }

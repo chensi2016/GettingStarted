@@ -1,145 +1,118 @@
 package com.intellijava;
+
 import java.util.ArrayList;
 
 class MyMap {
-    private ArrayList<MyHashNode> myHashNodeList = new ArrayList<>();
+    private ArrayList<HashNode> hashNodeList = new ArrayList<>();
 
-    private MyHashNode lastHashNode;
-    private int hashLength = 10;
+    private int bucketCount = 10;
     private int size = 0;
-    MyMap(){
-        for(int i=0;i<hashLength;i++)
-            myHashNodeList.add(new MyHashNode());
+
+    MyMap() {
+        for (int i = 0; i < bucketCount; i++)
+            hashNodeList.add(new HashNode());
     }
-    private int getIndex(String key){
-        int index;
-        index =Math.abs(key.hashCode())%hashLength;
-        return index;
+
+    private int getBucketIndex(String key) {
+        return Math.abs(key.hashCode()) % bucketCount;
     }
-    Integer getValue(String key) {
-        int index;
-        MyHashNode firstHashNode;
-        Integer value;
-        index = getIndex(key);
-        firstHashNode = myHashNodeList.get(index);
-        if(firstHashNode.next == null) {
-            if(firstHashNode.key.equals(key)) {
-                value = firstHashNode.value;
-                return value;
-            }
-            else
-                return null;
+
+    public Integer getValue(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key should not be null");
         }
-        while(firstHashNode.next != null){
-            if(firstHashNode.key.equals(key)) {
-                value = firstHashNode.value;
-                return value;
-            }
-            else
-                firstHashNode=firstHashNode.next;
-        }
+
+        int index = getBucketIndex(key);
+        HashNode firstHashNode = hashNodeList.get(index);
+        do {
+            if (key.equals(firstHashNode.key)) {
+                return firstHashNode.value;
+            } else
+                firstHashNode = firstHashNode.next;
+        } while (firstHashNode != null);
         return null;
     }
 
-    private MyHashNode getLastHashNode(int index) {
+    private HashNode getLastHashNode(int index) {
 
-        MyHashNode aHashNode;
-        if(myHashNodeList.get(index).key!=null) {
-            aHashNode = myHashNodeList.get(index);
-            while (aHashNode.next != null)
-                aHashNode = aHashNode.next;
+//        HashNode lastHashNode = null;
+//        if (hashNodeList.get(index).key != null) {
+//            lastHashNode = hashNodeList.get(index);
+//            while (lastHashNode.next != null)
+//                lastHashNode = lastHashNode.next;
+//        }
+//        return lastHashNode;
 
-            lastHashNode=aHashNode;
+        HashNode bucketHead = hashNodeList.get(index);
+        if (bucketHead.key == null) {
+            return null;
+        } else {
+            HashNode currentNode = bucketHead;
+            while (currentNode.next != null) {
+                currentNode = currentNode.next;
+            }
+            return currentNode;
         }
-        else
-            lastHashNode=null;
-        return lastHashNode;
+
     }
 
-    int getSize(){
+    int getSize() {
         return size;
     }
 
-    void add(String key, int value){
-        int index = getIndex(key);
-        MyHashNode aHashNode = new MyHashNode(key, value);
-        lastHashNode=getLastHashNode(index);
-        if(lastHashNode==null)
-             {
-                 size++;
-                 myHashNodeList.set(index, aHashNode);
-             }
-        else
-            {
-                lastHashNode=getLastHashNode(index);
-                lastHashNode.next=aHashNode;
-            }
-
+    void add(String key, int value) {
+        int index = getBucketIndex(key);
+        HashNode newHashNode = new HashNode(key, value);
+        HashNode lastHashNode = getLastHashNode(index);
+        if (lastHashNode == null) {
+            size++;
+            hashNodeList.set(index, newHashNode);
+        } else {
+            lastHashNode.next = newHashNode;
+        }
     }
 
     Integer remove(String key) {
-        int index = getIndex(key);
-        MyHashNode aHashNode;
-        aHashNode = myHashNodeList.get(index);
+        int index = getBucketIndex(key);
+        HashNode aHashNode;
+        aHashNode = hashNodeList.get(index);
         if (aHashNode.key != null && aHashNode.next == null) {
-            //1 notes
+            //1 nodes
             if (aHashNode.key.equals(key)) {
-                MyHashNode nullHashNode=new MyHashNode();
-                myHashNodeList.set(index, nullHashNode);
+                HashNode nullHashNode = new HashNode();
+                hashNodeList.set(index, nullHashNode);
                 size--;
                 return null;
             } else
                 return null;
-        }
-        else {
-            if (aHashNode.next.key != null && aHashNode.next.next == null) { //2 notes
-                if (aHashNode.key.equals(key)) {
-                    myHashNodeList.set(index, aHashNode.next);
-                    return aHashNode.next.value;
-                } else {
+        } else {
+            //2 nodes or more
+            if (aHashNode.key.equals(key)) {
+                //the head is the one to find
+                hashNodeList.set(index, aHashNode.next);
+                return aHashNode.next.value;
+            } else {
+                while (aHashNode.next.next != null) {
                     if (aHashNode.next.key.equals(key)) {
-                        aHashNode.next = null;
-                        return null;
+                        aHashNode.next = aHashNode.next.next;
+                        return aHashNode.next.value;
                     } else
-                        return null;
+                        aHashNode = aHashNode.next;
 
                 }
-            }
-            else{
-                //3 notes or more
-                if(aHashNode.key.equals(key)) {
-                    //the head is the one to find
-                    myHashNodeList.set(index, aHashNode.next);
-                    return aHashNode.next.value;
-                }
-
-                else{
-                    while(aHashNode.next.next!=null)
-                    {
-                        if(aHashNode.next.key.equals(key)) {
-                            aHashNode.next = aHashNode.next.next;
-                            return aHashNode.next.value;
-                        }
-                        else
-                            aHashNode=aHashNode.next;
-
-                    }
-                    if(aHashNode.next.key.equals(key))
-                        aHashNode.next=null;
+                if (aHashNode.next.key.equals(key))
+                    aHashNode.next = null;
 
 
-                }
-
-            } //3 notes or more finished
+            } //3 nodes or more finished
         }
 
         return null;
     }
 
 
-
-    boolean isEmpty(){
-        if(size==0)
+    boolean isEmpty() {
+        if (size == 0)
             return true;
         else
             return false;
