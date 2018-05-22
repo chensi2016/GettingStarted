@@ -17,77 +17,69 @@ class QNode{
 public class LRUCache {
     int capacity;
     QNode headNode;
-    QNode nextNode;
     public LRUCache(int capacity) {
         this.capacity=capacity;
-        for(int i=capacity-1;i>=0;i--)
+        QNode nextNode=null;
+        for(int i=capacity;i>=0;i--)
         {
-            headNode=new QNode();
-            if(i<capacity-1) {
+            headNode=new QNode(-999,0);
+            if(i<capacity) {
                 headNode.next=nextNode;
             }
             nextNode=headNode;
         }
-
-
     }
 
     public int get(int key) {
-        int value;
-        QNode newNode=new QNode();
         //check whether it is present
-        QNode pointerNode=headNode;
-        QNode prevNode=null;
-        QNode foundNode;
-        while(pointerNode!=null){
-            if(pointerNode.key==key) {
-                value=pointerNode.value;
-                foundNode=pointerNode;
-                if(pointerNode==headNode)
-                {
-                    headNode=pointerNode.next;
-
-                }
-                else
-                {
-                    prevNode.next=pointerNode.next;}
-                while(pointerNode.next!=null) {
+        QNode pointerNode;
+        pointerNode=headNode.next;
+        QNode prevNode=headNode;
+        QNode newNode=new QNode();
+        while(pointerNode!=null)
+        {
+            if(pointerNode.key==key){
+                newNode.key=key;
+                newNode.value=pointerNode.value;
+                //prevNode.next=pointerNode.next;
+                while(pointerNode!=null){
+                    prevNode=pointerNode;
                     pointerNode=pointerNode.next;
                 }
-                foundNode.next=pointerNode.next;
-                pointerNode.next=foundNode;
-                return value;
+                prevNode.next=newNode;
+                headNode.next=headNode.next.next;
+                return newNode.value;
             }
             prevNode=pointerNode;
             pointerNode=pointerNode.next;
         }
         return -1;
+
     }
 
     public void put(int key, int value) {
-        QNode newNode=new QNode(key, value);
         //check whether it is present
-        QNode pointerNode=headNode;
-        QNode prevNode=null;
-        QNode foundNode;
-        while(pointerNode!=null){
-            if(pointerNode.key==key) {
-                pointerNode.value=value;
-                foundNode=pointerNode;
+        QNode pointerNode;
+        pointerNode=headNode.next;
+        QNode prevNode=headNode;
+        QNode newNode=new QNode(key,value);
+        while(pointerNode!=null)
+        {
+            if(pointerNode.key==key){
                 prevNode.next=pointerNode.next;
-                while(pointerNode!=null) {
+                while(pointerNode!=null){
+                    prevNode=pointerNode;
                     pointerNode=pointerNode.next;
                 }
-                foundNode.next=prevNode.next;
-                prevNode.next=foundNode;
+                prevNode.next=newNode;
+                //headNode.next=headNode.next.next;
                 return;
             }
             prevNode=pointerNode;
             pointerNode=pointerNode.next;
         }
-        //insert the new node
-
+        //insert the new node;
         prevNode.next=newNode;
-
+        headNode.next=headNode.next.next;
     }
 }
