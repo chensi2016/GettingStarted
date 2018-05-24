@@ -17,18 +17,11 @@ class QNode{
 public class LRUCache {
     int capacity;
     QNode headNode;
+    int size=0;
     public LRUCache(int capacity) {
         this.capacity=capacity;
-        QNode nextNode=null;
-        for(int i=capacity;i>=0;i--)
-        {
-            headNode=new QNode(-999,0);
-            if(i<capacity) {
-                headNode.next=nextNode;
-            }
-            nextNode=headNode;
-        }
-    }
+        headNode=new QNode();
+      }
 
     public int get(int key) {
         //check whether it is present
@@ -41,13 +34,14 @@ public class LRUCache {
             if(pointerNode.key==key){
                 newNode.key=key;
                 newNode.value=pointerNode.value;
-                //prevNode.next=pointerNode.next;
+                prevNode.next=pointerNode.next;
+                pointerNode=pointerNode.next;
                 while(pointerNode!=null){
                     prevNode=pointerNode;
                     pointerNode=pointerNode.next;
                 }
                 prevNode.next=newNode;
-                headNode.next=headNode.next.next;
+                //headNode.next=headNode.next.next;
                 return newNode.value;
             }
             prevNode=pointerNode;
@@ -67,12 +61,12 @@ public class LRUCache {
         {
             if(pointerNode.key==key){
                 prevNode.next=pointerNode.next;
+                pointerNode=pointerNode.next;
                 while(pointerNode!=null){
                     prevNode=pointerNode;
                     pointerNode=pointerNode.next;
                 }
                 prevNode.next=newNode;
-                //headNode.next=headNode.next.next;
                 return;
             }
             prevNode=pointerNode;
@@ -80,6 +74,10 @@ public class LRUCache {
         }
         //insert the new node;
         prevNode.next=newNode;
-        headNode.next=headNode.next.next;
+        size++;
+        if(size>capacity){
+            headNode.next=headNode.next.next;
+        }
+
     }
 }
