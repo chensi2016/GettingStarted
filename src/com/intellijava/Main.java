@@ -57,5 +57,21 @@ public class Main {
         System.out.println(obj.get(3));
         System.out.println(obj.get(4));
         System.out.println(obj.get(5));
+
+        ListNode Node1 = new ListNode(1);
+        //ListNode Node2 = new ListNode(2);
+        //ListNode Node3 = new ListNode(3);
+        //ListNode Node4 = new ListNode(4);
+       // ListNode Node5 = new ListNode(5);
+
+        //Node1.next=Node2;
+        //Node2.next=Node3;
+        //Node3.next=Node4;
+        //Node4.next=Node5;
+
+        RemLastNthNode remLastN = new RemLastNthNode();
+        remLastN.removeNthFromEnd(Node1, 1);
+
+
     }
 }
