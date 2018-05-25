@@ -145,7 +145,11 @@ public class LRUCache {
             map.put(key, newNode);
             if(size>capacity){
                 map.remove(headNode.next.key);
-                headNode.next=headNode.next.next;
+                QNode newHeadNextNode=headNode.next.next;
+                //headNode.next.next=null;
+                //headNode.next.prev=null;
+                headNode.next=newHeadNextNode;
+                newHeadNextNode.prev=headNode;
                 size--;
             }
         }
