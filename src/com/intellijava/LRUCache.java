@@ -1,41 +1,57 @@
 package com.intellijava;
-import java.util.HashMap;
 
-class QNode{
+import java.util.HashMap;
+import java.util.Map;
+
+class Node {
     int key;
     int value;
-    QNode next;
-    QNode prev;
-    QNode(int key, int value){
+    Node next;
+    Node prev;
+    Node(int key, int value){
         this.key=key;
         this.value=value;
-        this.next=null;
-        this.prev=null;
+        next = this;
+        prev = this;
     }
-    QNode(){
+    Node(){
 
     }
+
+    void delete() {
+        Node toDeleteNodeNextNode = this.next;
+        Node toDeleteNodePreviousNode = this.prev;
+
+        toDeleteNodeNextNode.prev = toDeleteNodePreviousNode;
+        toDeleteNodePreviousNode.next = toDeleteNodeNextNode;
+
+        this.prev = null;
+        this.next = null;
+    }
 }
+
 public class LRUCache {
-    int capacity;
-    QNode headNode;
-    QNode lastNode;
-    int size=0;
-    HashMap<Integer,QNode> map=new HashMap<>();
+    private int capacity;
+    private Node headNode;
+    private Node lastNode;
+    private int size;
+    private Map<Integer, Node> map = new HashMap<>();
     public LRUCache(int capacity) {
-        this.capacity=capacity;
-        headNode=new QNode();
-        lastNode=null;
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("capacity should be positive");
+        }
+        this.capacity = capacity;
+        headNode = new Node();
       }
-    public QNode getRefer(Integer key){
+    private Node getReference(int key){
        return map.get(key);
     }
     public int get(int key) {
         //check whether it is present
-       /* QNode pointerNode;
+       /* Node pointerNode;
         pointerNode=headNode.next;
-        QNode prevNode=headNode;
-        QNode newNode=new QNode();
+        Node prevNode=headNode;
+        Node newNode=new Node();
         while(pointerNode!=null)
         {
             if(pointerNode.key==key){
@@ -56,17 +72,17 @@ public class LRUCache {
         }
         return -1;
         */
-       QNode foundNode=getRefer(key);
+       Node foundNode = getReference(key);
        if (foundNode == null){
            return -1;
        }
        else{
            //if the foundNode is not the last Node;
            if (foundNode.next != null ) {
+               map.remove(key);
                foundNode.next.prev = foundNode.prev;
                foundNode.prev.next = foundNode.next;
-               map.remove(key);
-               QNode newNode = new QNode(key, foundNode.value);
+               Node newNode = new Node(key, foundNode.value);
                newNode.prev = lastNode;
                lastNode.next = newNode;
                lastNode = newNode;
@@ -83,10 +99,10 @@ public class LRUCache {
     public void put(int key, int value) {
 
         //check whether it is present
-       /* QNode pointerNode;
+       /* Node pointerNode;
         pointerNode=headNode.next;
-        QNode prevNode=headNode;
-        QNode newNode=new QNode(key,value);
+        Node prevNode=headNode;
+        Node newNode=new Node(key,value);
         while(pointerNode!=null)
         {
             if(pointerNode.key==key){
@@ -111,45 +127,31 @@ public class LRUCache {
 */
 
        //check whether the node is present
-        QNode foundNode = getRefer(key);
+        Node foundNode = getReference(key);
         if( foundNode != null){
-            if (foundNode.next != null ) {
-                foundNode.value=value;
-                foundNode.next.prev = foundNode.prev;
-                foundNode.prev.next = foundNode.next;
-                foundNode.next = null;
-                foundNode.prev = lastNode;
-                lastNode.next = foundNode;
-                lastNode = foundNode;
-                return;
-            }
-            else {//if the foundNode is the last Node, just chang the value;
-                foundNode.value = value;
-                return;
-            }
-
+            get(key);
+            lastNode.value = value;
         }
         else {
             //insert the new node
-            QNode newNode = new QNode(key, value);
-            if(lastNode!=null) {
+            Node newNode = new Node(key, value);
+            if(lastNode != null) {
                 lastNode.next = newNode;
                 newNode.prev = lastNode;
             }
-            else{
+            else {
                 headNode.next = newNode;
                 newNode.prev = headNode;
             }
             size++;
             lastNode = newNode;
             map.put(key, newNode);
-            if(size>capacity){
-                map.remove(headNode.next.key);
-                QNode newHeadNextNode=headNode.next.next;
-                //headNode.next.next=null;
-                //headNode.next.prev=null;
-                headNode.next=newHeadNextNode;
-                newHeadNextNode.prev=headNode;
+            if(size > capacity){
+                Node toDeleteNode = headNode.next;
+                map.remove(toDeleteNode.key);
+
+                toDeleteNode.delete();
+
                 size--;
             }
         }
