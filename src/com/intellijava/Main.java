@@ -69,7 +69,7 @@ public class Main {
         //Node3.next=Node4;
         //Node4.next=Node5;
 
-        RemLastNthNode remLastN = new RemLastNthNode();
+        RemoveLastNthNode remLastN = new RemoveLastNthNode();
         remLastN.removeNthFromEnd(Node1, 1);
 
 

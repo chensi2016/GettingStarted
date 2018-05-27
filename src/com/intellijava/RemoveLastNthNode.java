@@ -6,14 +6,12 @@ class ListNode{
     ListNode next;
     ListNode(int val){
         this.val = val;
-        this.next = null;
     }
     ListNode(){
-
-        }
+    }
 }
 
-public class RemLastNthNode {
+public class RemoveLastNthNode {
     ListNode currentListNode = new ListNode();
     HashMap<Integer, ListNode> map = new HashMap<>();
     public ListNode removeNthFromEnd(ListNode head, int n) {
